@@ -1,0 +1,25 @@
+version: '2'
+services:
+  jenkins-volume:
+    image: jenkins-volume
+    volumes:
+      - /var/jenkins_home
+      - /var/lib/registry
+
+  registry:
+    image: registry
+    ports:
+      - "5000:5000"
+
+  jenkins-core:
+    depends_on:
+      - registry
+    image: jenkins-core
+    ports:
+      - "8080:8080"
+    volumes_from:
+      - jenkins-volume
+    # only for development, fix this
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    #environment:
